@@ -60,7 +60,7 @@ def main():
     llm = OllamaLLM(model="qwen3:8b")
     
     # Câu hỏi thử nghiệm
-    user_question = "Dựa vào các tài liệu được cung cấp, hãy lập bảng so sánh các trường thông tin được in trên bề mặt Thẻ Căn cước công dân (theo Luật 2014) và Thẻ Căn cước (theo Luật 2023). Mục 'Quê quán' và 'Nơi thường trú' đã được thay đổi thành gì?"
+    user_question = "Luật mới năm 2023 quy định vân tay sẽ được in ở mặt trước hay mặt sau của Thẻ Căn cước? So sánh với vị trí in vân tay của thẻ năm 2014."
     print(f"Câu hỏi: {user_question}\n")
 
     # Lấy 6 đoạn liên quan nhất để đảm bảo bốc trúng cả bản cũ và mới
@@ -74,17 +74,18 @@ def main():
 
     # Prompt đối chiếu
     prompt = f"""
-    Bạn là một trợ lý pháp lý chuyên nghiệp. Nhiệm vụ của bạn là so sánh và tìm ra sự khác biệt giữa hai phiên bản của pháp lý dựa trên các trích đoạn dưới đây.
+    Bạn là một trợ lý chuyên đối chiếu văn bản. Hãy so sánh và tìm ra sự khác biệt giữa hai phiên bản tài liệu một cách khách quan, chỉ dựa trên các trích đoạn dưới đây.
     
     [TRÍCH ĐOẠN TÀI LIỆU TÌM ĐƯỢC]:
     {context}
     
-    [YÊU CẦU]: 
+    [YÊU CẦU BẮT BUỘC]: 
     1. Trả lời trực tiếp câu hỏi: {user_question}
-    2. Hãy trích dẫn tóm tắt nội dung ở [BẢN CŨ] là gì và [BẢN MỚI] là gì.
-    3. Chỉ ra rõ ràng điểm thay đổi (thêm, bớt, hay sửa đổi chữ nào).
-    Nếu thông tin không có trong trích đoạn, hãy trả lời là "Không tìm thấy thông tin thay đổi", tuyệt đối không tự bịa ra.
-    Trả lời câu hỏi bằng tiếng Việt.
+    2. Nêu rõ nội dung ở [BẢN CŨ] là gì và [BẢN MỚI] là gì.
+    3. Chỉ ra chính xác các điểm thay đổi (thêm, xóa, sửa).
+    4. Nếu trích đoạn KHÔNG chứa thông tin liên quan, chỉ được phép trả lời duy nhất một câu: "Không tìm thấy thông tin thay đổi."
+    5. TUYỆT ĐỐI KHÔNG thêm các phần "Lưu ý", "Kết luận" ở cuối câu trả lời. Dừng sinh văn bản ngay khi hoàn thành yêu cầu số 3.
+    
     Câu trả lời của bạn:
     """
 
